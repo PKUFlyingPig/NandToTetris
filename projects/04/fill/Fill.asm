@@ -12,64 +12,72 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+// Pseudocode:
+// kbd = GetKBD();
+// if(kbd>0) goto BLACK;
+// if(kbd==0) goto WHITE;
+// WHITE:
+//     for(int i=0;i<8192;i++) M[i+SCREEN]=0;
+// BLACK:
+//     for(int i=0;i<8192;i++) M[i+SCREEN]=1;
 
-@8192
-D=A
-@len
-M=D
+@SCREEN
 
-(LOOP1)
-@KBD
-D=M
-@WHITE
-D;JEQ
-@BLACK
-0;JMP
+(CHECK)
+    @KBD
+    D=M
+    @BLACK
+    D;JGT
+    @WHITE
+    0;JMP
 
 (WHITE)
-@i
-M=0
+    // i = 0
+    @i
+    M=0
+    (LOOPA)
+        // if(i==8192) goto CHECK;
+        @8192
+        D=A
+        @i
+        D=M-D
+        @CHECK
+        D;JEQ
 
-(LOOP2)
-@len
-D=M
-@i
-D=D-M
-@LOOP1
-D;JEQ
+        @i
+        D=M
+        @SCREEN
+        A=A+D
+        M=0
 
-@SCREEN
-D=A
-@i
-A=D+M
-M=0
+        @i
+        M=M+1
 
-@i
-M=M+1
+        @LOOPA
+        0;JMP
 
-@LOOP2
-0;JMP
 
 (BLACK)
-@i
-M=0
+    // i = 0
+    @i
+    M=0
+    (LOOPB)
+        // if(i==8192) goto CHECK;
+        @8192
+        D=A
+        @i
+        D=M-D
+        @CHECK
+        D;JEQ
 
-(LOOP3)
-@len
-D=M
-@i
-D=D-M
-@LOOP1
-D;JEQ
+        @i
+        D=M
+        @SCREEN
+        A=A+D
+        M=-1
 
-@SCREEN
-D=A
-@i
-A=D+M
-M=-1
+        @i
+        M=M+1
 
-@i
-M=M+1
-
-@LOOP3
-0;JMP
+        @LOOPB
+        0;JMP
